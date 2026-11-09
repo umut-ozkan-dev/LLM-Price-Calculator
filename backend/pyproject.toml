@@ -1,17 +1,46 @@
 [project]
-name = "backend"
+name = "llm-price-calculator-backend"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-authors = [
-    { name = "Umut Özkan", email = "umutozkan123456@gmail.com" }
+description = "Estimate and measure the USD cost of sending a prompt to an LLM API."
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=2.6.0",
+    "fastapi>=0.162.2",
+    "google-genai>=3.0.0",
+    "httpx>=0.28.1",
+    "openai>=3.46.0",
+    "pydantic-settings>=2.16.2",
+    "slowapi>=0.1.10",
+    "tiktoken>=0.14.0",
+    "uvicorn[standard]>=0.54.0",
 ]
-requires-python = ">=3.12"
-dependencies = []
 
-[project.scripts]
-backend = "backend:main"
+[tool.uv]
+package = false
 
-[build-system]
-requires = ["uv_build>=0.12.8,<0.13.0"]
-build-backend = "uv_build"
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.4.1.post1",
+    "ruff>=0.17.4",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app", "tests"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
