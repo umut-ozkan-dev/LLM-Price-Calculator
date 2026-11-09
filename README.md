@@ -4,7 +4,14 @@ Estimate what a prompt will cost, in USD, before you send it to an LLM API. Past
 
 ## Screenshots
 
-Placeholder for a capture of the estimator and a capture of the `/models` catalog.
+Desktop is 1440px wide and mobile is 390px. Dark is the default theme.
+
+| | Dark | Light |
+| --- | --- | --- |
+| Estimate, desktop | ![Estimate desktop dark](frontend/docs/screenshots/estimate-desktop-dark.png) | ![Estimate desktop light](frontend/docs/screenshots/estimate-desktop-light.png) |
+| Estimate, mobile | ![Estimate mobile dark](frontend/docs/screenshots/estimate-mobile-dark.png) | ![Estimate mobile light](frontend/docs/screenshots/estimate-mobile-light.png) |
+| Catalog, desktop | ![Catalog desktop dark](frontend/docs/screenshots/models-desktop-dark.png) | ![Catalog desktop light](frontend/docs/screenshots/models-desktop-light.png) |
+| Catalog, mobile | ![Catalog mobile dark](frontend/docs/screenshots/models-mobile-dark.png) | ![Catalog mobile light](frontend/docs/screenshots/models-mobile-light.png) |
 
 ## Catalog
 

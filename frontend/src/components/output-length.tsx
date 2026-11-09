@@ -1,63 +1,90 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
 import { formatTokens } from "@/lib/format";
+import { cn } from "@/lib/utils";
+
+export type OutputMode = "auto" | "short" | "medium" | "long" | "custom";
+
+export const OUTPUT_PRESETS: Record<Exclude<OutputMode, "auto" | "custom">, number> = {
+  short: 128,
+  medium: 512,
+  long: 2048,
+};
+
+const MODES: { id: OutputMode; label: string }[] = [
+  { id: "auto", label: "Auto" },
+  { id: "short", label: "Short" },
+  { id: "medium", label: "Medium" },
+  { id: "long", label: "Long" },
+  { id: "custom", label: "Custom" },
+];
 
 type OutputLengthProps = {
-  auto: boolean;
-  onAutoChange: (auto: boolean) => void;
+  mode: OutputMode;
+  onModeChange: (mode: OutputMode) => void;
   value: number;
   onValueChange: (value: number) => void;
   max: number;
 };
 
-export function OutputLength({ auto, onAutoChange, value, onValueChange, max }: OutputLengthProps) {
-  const sliderMax = Math.max(50, Math.min(max, 16_000));
+export function OutputLength({ mode, onModeChange, value, onValueChange, max }: OutputLengthProps) {
+  const sliderMax = Math.max(64, Math.min(max, 16_000));
   const clamped = Math.min(Math.max(value, 0), max);
 
   return (
-    <fieldset className="flex flex-col gap-3">
-      <legend className="text-sm font-medium">Expected output</legend>
-      <div className="flex items-center justify-between gap-3">
-        <Label htmlFor="auto-output" className="text-sm font-normal text-muted-foreground">
-          Auto (estimate range)
-        </Label>
-        <Switch id="auto-output" checked={auto} onCheckedChange={onAutoChange} />
+    <fieldset className="surface-card flex flex-col gap-4 p-5">
+      <legend className="text-[15px] font-semibold">Expected output</legend>
+      <div className="grid grid-cols-5 gap-1 rounded-xl bg-secondary p-1" role="radiogroup" aria-label="Expected output length">
+        {MODES.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            role="radio"
+            aria-checked={mode === item.id}
+            className={cn(
+              "rounded-lg px-2 py-2 text-[13px] font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-[15px]",
+              mode === item.id ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
+            )}
+            onClick={() => onModeChange(item.id)}
+          >
+            {item.label}
+          </button>
+        ))}
       </div>
-      <div className={auto ? "pointer-events-none opacity-40" : ""}>
-        <div className="flex items-center gap-3">
+      {mode === "custom" ? (
+        <div className="flex items-center gap-4">
           <Slider
             aria-label="Expected output tokens"
             min={0}
             max={sliderMax}
-            step={10}
-            disabled={auto}
+            step={16}
             value={[Math.min(clamped, sliderMax)]}
             onValueChange={(next) => {
               const resolved = Array.isArray(next) ? next[0] : next;
               onValueChange(resolved ?? 0);
             }}
+            className="[&_[data-slot=slider-track]]:h-2 [&_[data-slot=slider-track]]:bg-foreground/20"
           />
           <Input
             aria-label="Expected output tokens"
             type="number"
             min={0}
             max={max}
-            disabled={auto}
             value={clamped}
             onChange={(event) => onValueChange(Number(event.target.value))}
-            className="w-28 font-mono"
+            className="tabular w-28 font-mono"
           />
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">
-          {auto
-            ? "Low, expected, and high output lengths are derived from the input size."
-            : `${formatTokens(clamped)} tokens. Model max is ${formatTokens(max)}.`}
-        </p>
-      </div>
+      ) : null}
+      <p className="text-[13px] leading-relaxed text-muted-foreground">
+        {mode === "auto"
+          ? "Auto builds a low, expected, and high output from the size of your prompt."
+          : mode === "custom"
+            ? `${formatTokens(clamped)} tokens. This model allows up to ${formatTokens(max)}.`
+            : `${MODES.find((item) => item.id === mode)?.label} uses ${formatTokens(Math.min(OUTPUT_PRESETS[mode], max))} output tokens.`}
+      </p>
     </fieldset>
   );
 }

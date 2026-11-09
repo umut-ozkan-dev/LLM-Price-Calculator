@@ -1,12 +1,12 @@
 import type { ProviderName } from "./types";
 
-export const PROVIDERS: Record<ProviderName, { label: string; dot: string }> = {
-  openai: { label: "OpenAI", dot: "bg-emerald-500" },
-  anthropic: { label: "Anthropic", dot: "bg-amber-500" },
-  google: { label: "Google", dot: "bg-blue-500" },
-  mistral: { label: "Mistral", dot: "bg-orange-500" },
-  deepseek: { label: "DeepSeek", dot: "bg-indigo-400" },
-  groq: { label: "Groq", dot: "bg-rose-500" },
+export const PROVIDERS: Record<ProviderName, { label: string; color: string }> = {
+  openai: { label: "OpenAI", color: "#10a37f" },
+  anthropic: { label: "Anthropic", color: "#d4a27f" },
+  google: { label: "Google", color: "#4285f4" },
+  mistral: { label: "Mistral", color: "#f54e00" },
+  deepseek: { label: "DeepSeek", color: "#4d6bfe" },
+  groq: { label: "Meta", color: "#0668E1" },
 };
 
 export const PROVIDER_ORDER: ProviderName[] = [

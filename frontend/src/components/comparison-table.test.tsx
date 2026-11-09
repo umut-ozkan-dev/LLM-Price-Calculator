@@ -92,6 +92,6 @@ describe("ComparisonTable", () => {
     render(
       <ComparisonTable rows={[]} selectedId="selected" isLoading={false} isEmpty onSelect={() => undefined} />,
     );
-    expect(screen.getByText("The comparison appears after you enter a prompt.")).toBeInTheDocument();
+    expect(screen.getByText("Paste a prompt to compare every model.")).toBeInTheDocument();
   });
 });
